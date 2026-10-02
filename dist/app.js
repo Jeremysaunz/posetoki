@@ -396,7 +396,7 @@ async function fullscreen() {
   } catch {}
 }
 
-function history() {
+function practiceHistory() {
   try {
     const entries = JSON.parse(localStorage.getItem('posetoki-history') || '[]');
     return Array.isArray(entries) ? entries : [];
@@ -406,7 +406,7 @@ function history() {
 }
 
 function renderNextGoal() {
-  const goal = history().find(entry => goalKeys[entry.goal]);
+  const goal = practiceHistory().find(entry => goalKeys[entry.goal]);
   $('nextGoal').textContent = goal ? `${t('지난번에 고른 다음 목표')}: ${t(goalKeys[goal.goal])}` : '';
 }
 
@@ -442,7 +442,7 @@ function finishSession() {
   if (total > 0) {
     try {
       recordId = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-      const entries = history();
+      const entries = practiceHistory();
       entries.unshift({ id: recordId, date: new Date().toISOString(), seconds: total, count: seen.size, goal: '' });
       localStorage.setItem('posetoki-history', JSON.stringify(entries.slice(0, 100)));
       saved = true;
@@ -505,7 +505,7 @@ function finishSession() {
     note.textContent = t('선택한 목표만 이 브라우저의 기록에 남습니다.');
     select.onchange = () => {
       try {
-        const entries = history();
+        const entries = practiceHistory();
         const record = entries.find(item => item.id === recordId);
         if (record) {
           record.goal = select.value;
@@ -530,7 +530,7 @@ function titleNode(value) {
 
 function openHistory() {
   const content = document.createElement('div');
-  const records = history();
+  const records = practiceHistory();
   const summary = document.createElement('p');
   summary.className = 'info-copy';
   const totalPoses = records.reduce((sum, item) => sum + Number(item.count || 0), 0);

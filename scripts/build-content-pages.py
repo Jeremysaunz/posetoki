@@ -6,6 +6,8 @@ from pathlib import Path
 
 from lesson_content import LESSONS, LESSON_SLUGS
 from operations_content import OPERATIONS, operation_sections
+from discovery_content import COPY as DISCOVERY, EXTRA_SLUGS, render_beginner, render_catalog, load_poses
+from seo_common import HOME, metadata, page_schema, byline
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -52,9 +54,9 @@ COPY = {
             "lead": "포즈토키는 회원가입 없이 사용할 수 있습니다. 이 안내는 현재 공개된 사이트에서 사진과 연습 기록이 어떻게 처리되는지 설명합니다.",
             "body": """
 <section><h2>내 사진</h2><p>사용자가 선택한 이미지 파일은 브라우저의 임시 주소로 표시됩니다. 포즈토키는 이 파일을 자체 서버에 업로드하지 않으며, 연습 기록에도 파일이나 파일명을 저장하지 않습니다. 새로고침하거나 페이지를 닫으면 선택한 사진 목록은 사라집니다. 사용 권한이 없는 타인의 사진이나 민감한 이미지를 선택하지 않는 것이 좋습니다.</p></section>
-<section><h2>이 기기에 저장되는 정보</h2><p>언어 선택은 브라우저의 <code>localStorage</code>에 저장됩니다. 연습을 마치면 날짜, 실제 연습 시간, 관찰한 포즈 수를 최대 100회까지 같은 브라우저에 저장합니다. 계정이나 기기 간 동기화는 없고, 그림 파일은 저장하지 않습니다. 선택한 다음 연습 목표와 최근 관찰한 예시 포즈 번호(최대 120개)도 이 브라우저에만 저장합니다. 포즈 번호는 반복을 줄이는 데 사용합니다. 기록을 삭제하려면 브라우저의 해당 사이트 데이터를 지우면 됩니다.</p></section>
+<section><h2>이 기기에 저장되는 정보</h2><p>언어와 라이트·다크 모드 선택은 브라우저의 <code>localStorage</code>에 저장됩니다. 연습을 마치면 날짜, 실제 연습 시간, 관찰한 포즈 수를 최대 100회까지 같은 브라우저에 저장합니다. 계정이나 기기 간 동기화는 없고, 그림 파일은 저장하지 않습니다. 선택한 다음 연습 목표와 최근 관찰한 예시 포즈 번호(최대 120개)도 이 브라우저에만 저장합니다. 포즈 번호는 반복을 줄이는 데 사용합니다. 기록을 삭제하려면 브라우저의 해당 사이트 데이터를 지우면 됩니다.</p></section>
 <section><h2>호스팅과 외부 요청</h2><p>사이트는 Vercel에서 제공됩니다. 페이지 요청 과정에서 IP 주소, 브라우저 정보 등 일반적인 접속 정보가 호스팅·보안 목적으로 처리될 수 있습니다. 홈페이지 글꼴은 Google Fonts에서 불러오므로 글꼴 요청 시 접속 정보가 해당 서비스에 전달될 수 있습니다. 공개 GitHub 이슈 링크를 선택하면 GitHub의 별도 정책이 적용됩니다.</p></section>
-<section><h2>광고와 쿠키</h2><p>현재 포즈토키에는 Google AdSense 광고 코드와 자체 방문 분석 도구가 설치되어 있지 않습니다. 따라서 이 사이트가 광고 노출을 위해 쿠키를 설정한다고 설명하지 않습니다. 앞으로 광고를 도입하면 이 안내에 광고 제공자, 쿠키·식별자 이용, 선택권을 추가하고 해당 지역에서 필요한 동의 절차를 마련한 뒤 적용하겠습니다.</p></section>
+<section><h2>광고와 쿠키</h2><p>Google AdSense 연결 및 광고용 코드가 설치되어 있습니다. 광고 표시 여부는 Google의 사이트 승인과 광고 설정에 따라 달라집니다. 코드가 로드될 때 IP 주소, 브라우저·기기 정보 등이 Google에 전달될 수 있고, 광고 서비스가 쿠키나 식별자를 사용할 수 있습니다. 자체 방문 분석 도구는 설치되어 있지 않습니다. Google의 데이터 처리와 광고 선택권은 <a href="https://policies.google.com/technologies/ads" rel="noopener noreferrer">Google 광고 안내</a>와 <a href="https://myadcenter.google.com/" rel="noopener noreferrer">내 광고 센터</a>에서 확인할 수 있습니다. 해당 지역에서 요구되는 광고 동의 설정은 광고 운영 시 적용해야 합니다.</p></section>
 <section><h2>문의와 변경</h2><p>기록 삭제 또는 데이터 이용에 관한 의견은 <a href="https://github.com/Jeremysaunz/posetoki/issues/new" rel="noopener noreferrer">공개 GitHub 이슈</a>로 남길 수 있습니다. 공개 게시물이므로 사진이나 연락처 등 민감한 정보는 올리지 마세요. 기능이나 외부 서비스가 바뀌면 이 페이지의 날짜와 내용을 업데이트합니다.</p></section>
 """,
         },
@@ -95,9 +97,9 @@ COPY = {
             "lead": "PoseToki は登録なしで利用できます。このページでは、現在公開しているサイトが写真と練習記録をどう扱うかを説明します。",
             "body": """
 <section><h2>自分の写真</h2><p>選択した画像はブラウザの一時 URL で表示します。ファイルを PoseToki のサーバーにアップロードせず、練習記録にもファイルやファイル名を保存しません。再読み込みやページを閉じると選択一覧は消えます。権利のない他人の写真や機微な画像の使用は避けてください。</p></section>
-<section><h2>端末に保存する情報</h2><p>言語設定をブラウザの <code>localStorage</code> に保存します。練習後は日付、実際の練習時間、見たポーズ数を最大100回分保存します。アカウントや端末間の同期はなく、絵は保存されません。選んだ次回の目標と最近見たサンプルの番号（最大120個）も、このブラウザにだけ保存します。番号は繰り返しを減らすために使います。削除するにはブラウザのこのサイトのデータを消去してください。</p></section>
+<section><h2>端末に保存する情報</h2><p>言語とライト・ダークモード設定をブラウザの <code>localStorage</code> に保存します。練習後は日付、実際の練習時間、見たポーズ数を最大100回分保存します。アカウントや端末間の同期はなく、絵は保存されません。選んだ次回の目標と最近見たサンプルの番号（最大120個）も、このブラウザにだけ保存します。番号は繰り返しを減らすために使います。削除するにはブラウザのこのサイトのデータを消去してください。</p></section>
 <section><h2>ホスティングと外部通信</h2><p>サイトは Vercel で提供しています。配信やセキュリティのため、IP アドレスやブラウザ情報などの一般的な接続情報が処理される場合があります。ホームページのフォントは Google Fonts から読み込むため、接続情報が同サービスに送られる場合があります。GitHub Issue のリンクを開くと GitHub の別のポリシーが適用されます。</p></section>
-<section><h2>広告と Cookie</h2><p>現在、Google AdSense の広告コードと独自のアクセス解析ツールは設置していません。広告を導入する場合は、広告事業者、Cookie・識別子の使用、利用者の選択肢をこのページに追加し、対象地域で必要な同意の仕組みを用意してから適用します。</p></section>
+<section><h2>広告と Cookie</h2><p>Google AdSense の接続・広告用コードを設置しています。広告表示は Google のサイト承認と広告設定により異なります。コードの読み込み時に IP アドレス、ブラウザ・端末情報などが Google に送信され、広告サービスが Cookie や識別子を利用する場合があります。独自のアクセス解析は設置していません。データの取扱いと選択肢は <a href="https://policies.google.com/technologies/ads" rel="noopener noreferrer">Google の広告案内</a>と<a href="https://myadcenter.google.com/" rel="noopener noreferrer">マイ アド センター</a>を確認してください。広告運営時には対象地域で必要な同意設定を適用する必要があります。</p></section>
 <section><h2>お問い合わせと変更</h2><p>データの取扱いに関するご意見は <a href="https://github.com/Jeremysaunz/posetoki/issues/new" rel="noopener noreferrer">公開 GitHub Issue</a> に投稿できます。個人の写真や連絡先は投稿しないでください。機能や外部サービスが変われば、このページの日付と内容を更新します。</p></section>
 """,
         },
@@ -138,9 +140,9 @@ COPY = {
             "lead": "PoseToki works without an account. This notice describes how the current site handles selected photos and practice records.",
             "body": """
 <section><h2>Your photos</h2><p>Images you select are displayed through temporary browser URLs. PoseToki does not upload the files to its server or store the files or file names in your practice log. The selection disappears when you reload or close the page. Avoid using sensitive images or photographs you do not have permission to use.</p></section>
-<section><h2>Data saved on your device</h2><p>Your language choice is kept in browser <code>localStorage</code>. When you finish a session, the date, actual drawing time, and number of poses observed are stored for up to 100 sessions in the same browser. There is no account or cross-device sync, and drawings are not saved. Your chosen next-session goal and up to 120 recently viewed sample IDs also stay in this browser. These IDs help reduce repeats. Clear this site's browser data to remove these records.</p></section>
+<section><h2>Data saved on your device</h2><p>Your language and light/dark mode choices are kept in browser <code>localStorage</code>. When you finish a session, the date, actual drawing time, and number of poses observed are stored for up to 100 sessions in the same browser. There is no account or cross-device sync, and drawings are not saved. Your chosen next-session goal and up to 120 recently viewed sample IDs also stay in this browser. These IDs help reduce repeats. Clear this site's browser data to remove these records.</p></section>
 <section><h2>Hosting and external requests</h2><p>Vercel serves the site. Ordinary connection data, such as IP address and browser information, may be processed for delivery and security. The homepage loads fonts from Google Fonts, which may receive connection information with font requests. If you follow the public GitHub issues link, GitHub's own policies apply there.</p></section>
-<section><h2>Advertising and cookies</h2><p>PoseToki currently has no Google AdSense code or first-party visitor analytics installed. We do not describe ad cookies as active on this site. Before introducing advertising, we will update this notice with the ad provider, use of cookies or other identifiers, and available choices, and put any required regional consent process in place.</p></section>
+<section><h2>Advertising and cookies</h2><p>Google AdSense site-connection and advertising code is installed. Whether ads appear depends on Google’s site approval and ad settings. Loading the code may send an IP address and browser or device information to Google; advertising services may use cookies or identifiers. No first-party visitor analytics is installed. See <a href="https://policies.google.com/technologies/ads" rel="noopener noreferrer">Google’s advertising information</a> and <a href="https://myadcenter.google.com/" rel="noopener noreferrer">My Ad Center</a> for data handling and choices. Required regional ad-consent settings need to be applied when operating ads.</p></section>
 <section><h2>Questions and changes</h2><p>You may leave data-use feedback through a <a href="https://github.com/Jeremysaunz/posetoki/issues/new" rel="noopener noreferrer">public GitHub issue</a>. Do not post private photos or contact information there. If the site's features or external services change, we will update this page and its date.</p></section>
 """,
         },
@@ -181,9 +183,9 @@ COPY = {
             "lead": "PoseToki 不需帳號即可使用。本頁說明目前公開網站如何處理你選取的照片與練習紀錄。",
             "body": """
 <section><h2>你的照片</h2><p>選取的圖片透過瀏覽器暫時網址顯示。PoseToki 不會將檔案上傳到本站伺服器，也不會把檔案或檔名存進練習紀錄。重新整理或關閉頁面後，選取清單便會消失。請避免使用敏感圖片或未獲授權的他人照片。</p></section>
-<section><h2>存在裝置上的資訊</h2><p>語言選擇儲存在瀏覽器的 <code>localStorage</code>。練習結束後，日期、實際繪畫時間和看過的姿勢數最多保存 100 次於同一瀏覽器。沒有帳號或跨裝置同步，也不保存畫作。選定的下次目標與最近看過的範例編號（最多 120 個）也只保存在此瀏覽器，用於減少重複。清除此網站的瀏覽器資料即可刪除紀錄。</p></section>
+<section><h2>存在裝置上的資訊</h2><p>語言與淺色／深色模式選擇儲存在瀏覽器的 <code>localStorage</code>。練習結束後，日期、實際繪畫時間和看過的姿勢數最多保存 100 次於同一瀏覽器。沒有帳號或跨裝置同步，也不保存畫作。選定的下次目標與最近看過的範例編號（最多 120 個）也只保存在此瀏覽器，用於減少重複。清除此網站的瀏覽器資料即可刪除紀錄。</p></section>
 <section><h2>託管與外部連線</h2><p>網站由 Vercel 提供。為了傳送頁面及維護安全，IP 位址、瀏覽器資訊等一般連線資料可能會被處理。首頁字型由 Google Fonts 載入，字型請求可能向該服務傳送連線資訊。前往公開 GitHub Issue 時，則適用 GitHub 自身的政策。</p></section>
-<section><h2>廣告與 Cookie</h2><p>目前 PoseToki 未安裝 Google AdSense 廣告程式碼或本站自行設置的流量分析工具，因此本站目前沒有為展示廣告而設定 Cookie。日後若加入廣告，我們會先更新廣告供應商、Cookie 或其他識別資料與使用者選擇的說明，並在適用地區設置必要的同意程序。</p></section>
+<section><h2>廣告與 Cookie</h2><p>本站已安裝 Google AdSense 的網站連結及廣告程式碼。是否顯示廣告取決於 Google 的網站核准與廣告設定。載入程式碼時，IP 位址、瀏覽器或裝置資訊可能傳送至 Google；廣告服務可能使用 Cookie 或識別資料。本站未安裝自行設置的流量分析工具。資料處理與廣告選擇可參考 <a href="https://policies.google.com/technologies/ads" rel="noopener noreferrer">Google 廣告說明</a>及<a href="https://myadcenter.google.com/" rel="noopener noreferrer">我的廣告中心</a>。營運廣告時需套用適用地區要求的同意設定。</p></section>
 <section><h2>問題與更新</h2><p>資料使用方面的意見可透過<a href="https://github.com/Jeremysaunz/posetoki/issues/new" rel="noopener noreferrer">公開 GitHub Issue</a>提出。請勿張貼私人照片或聯絡方式。網站功能或外部服務變更時，本頁日期和內容也會更新。</p></section>
 """,
         },
@@ -236,7 +238,7 @@ def render_lesson(lang: str, slug: str) -> str:
         "seated": ("PT049", 180, "CH"),
     }
     pose, seconds, category = practice_settings[slug]
-    practice_href = f"/?poseId={pose}&amp;seconds={seconds}&amp;count=5&amp;category={category}#practice"
+    practice_href = f"{HOME[lang]}?poseId={pose}&amp;seconds={seconds}&amp;count=5&amp;category={category}#practice"
     return f"""
 <div class="lesson-example">
   <figure class="lesson-photo"><div class="photo-frame"><img src="/assets/{photo}" width="768" height="1536" loading="lazy" decoding="async" alt="{escape(alt, quote=True)}">{markers}</div><figcaption>{escape(caption)}</figcaption></figure>
@@ -253,22 +255,24 @@ def render_lesson(lang: str, slug: str) -> str:
 
 def render(lang: str, slug: str) -> str:
     copy = COPY[lang]
-    article = copy[slug] if slug in SLUGS else LESSONS[lang][slug]
+    article = DISCOVERY[lang][slug] if slug in EXTRA_SLUGS else copy[slug] if slug in SLUGS else LESSONS[lang][slug]
     operation = OPERATIONS[lang]
     title = operation["title"] if slug == "about" else article["title"]
-    body = article["body"] if slug in SLUGS else render_lesson(lang, slug)
+    body = render_beginner(lang) if slug == 'beginner' else render_catalog(lang) if slug == 'poses' else article["body"] if slug in SLUGS else render_lesson(lang, slug)
     if slug == "about":
         before, after = operation_sections(lang)
         body = before + body + after
     elif slug == "privacy":
         body = f'<p>{escape(operation["privacy_operator"])}</p>' + body
-    if slug == "guide" or slug in LESSON_SLUGS:
+    if slug == "guide" or slug in LESSON_SLUGS or slug == 'beginner':
         body += lesson_index(lang, slug if slug in LESSON_SLUGS else None)
-    lesson_style = '<link rel="stylesheet" href="/lesson.css?v=1">' if slug == "guide" or slug in LESSON_SLUGS else ''
+    if slug != 'privacy':
+        body += f'<section><h2>{escape(DISCOVERY[lang]["nav"][0])}</h2><p><a href="{page_href(lang, "beginner")}">{escape(DISCOVERY[lang]["beginner"]["title"])}</a> · <a href="{page_href(lang, "poses")}">{escape(DISCOVERY[lang]["nav"][1])}</a></p></section>' if slug != 'beginner' else f'<p><a href="{page_href(lang, "poses")}">{escape(DISCOVERY[lang]["nav"][1])} →</a></p>'
+    lesson_style = '<link rel="stylesheet" href="/lesson.css?v=1">'
     alternates = "\n".join(
         f'<link rel="alternate" hreflang="{code}" href="{page_url(code, slug)}">'
         for code in LANGS
-    )
+    ) + f'\n<link rel="alternate" hreflang="x-default" href="{page_url("ko", slug)}">'
     languages = "".join(
         f'<a href="{page_href(code, slug)}" hreflang="{code}" lang="{code}"'
         + (' aria-current="page"' if code == lang else '')
@@ -281,6 +285,11 @@ def render(lang: str, slug: str) -> str:
         + f'>{escape(operation["nav"] if item == "about" else copy["nav"][item])}</a>'
         for item in SLUGS
     )
+    nav += f'<a href="{page_href(lang, "poses")}">{escape(DISCOVERY[lang]["nav"][1])}</a>'
+    image = '/assets/' + LESSONS[lang][slug]['primary'][0] if slug in LESSON_SLUGS else '/assets/pose-01.jpg'
+    kind = 'Article' if slug in ('guide', 'beginner', *LESSON_SLUGS) else 'CollectionPage' if slug == 'poses' else 'AboutPage' if slug == 'about' else 'WebPage'
+    items = [{'@type': 'ListItem', 'position': i + 1, 'item': {'@type': 'ImageObject', 'name': p['name'][lang], 'description': p['focus'][lang], 'contentUrl': ORIGIN + p['image'], 'url': page_url(lang, slug) + '#' + p['id']}} for i, p in enumerate(load_poses())] if slug == 'poses' else None
+    seo = metadata(lang, title + ' | PoseToki', article['description'], page_url(lang, slug), image, 'article' if kind == 'Article' else 'website') + '\n' + page_schema(lang, slug, title, article['description'], image, kind, items)
     return f"""<!doctype html>
 <html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{escape(title)} | PoseToki</title>
@@ -289,35 +298,43 @@ def render(lang: str, slug: str) -> str:
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5987896746147751" crossorigin="anonymous"></script>
 <link rel="canonical" href="{page_url(lang, slug)}">
 {alternates}
+{seo}
 <link rel="icon" type="image/svg+xml" href="/assets/rabbit-mark.svg">
-<link rel="stylesheet" href="/content.css?v=2">
+<link rel="stylesheet" href="/content.css?v=3">
 {lesson_style}
 </head><body>
 <a class="skip" href="#content">{escape(copy['a11y']['skip'])}</a>
-<header class="site-header"><div class="shell top"><a class="brand" href="/"><img class="brand-mark" src="/assets/rabbit-mark.svg" alt=""> <strong>PoseToki</strong></a><nav aria-label="{escape(copy['a11y']['main_nav'])}"><a href="/">{escape(copy['nav']['studio'])}</a>{nav}</nav></div></header>
+<header class="site-header"><div class="shell top"><a class="brand" href="{HOME[lang]}"><img class="brand-mark" src="/assets/rabbit-mark.svg" alt=""> <strong>PoseToki</strong></a><nav aria-label="{escape(copy['a11y']['main_nav'])}"><a href="{HOME[lang]}">{escape(copy['nav']['studio'])}</a>{nav}</nav></div></header>
 <main class="shell" id="content"><div class="language-links" aria-label="{escape(copy['a11y']['languages'])}">{languages}</div>
-<article class="{'lesson-article' if slug in LESSON_SLUGS else ''}"><p class="eyebrow">PoseToki · {escape(operation['nav'] if slug == 'about' else copy['nav'].get(slug, copy['nav']['guide']))}</p><h1>{escape(title)}</h1><p class="lead">{escape(article['lead'])}</p><p class="updated">{escape(copy['updated'])}</p>{body}</article>
-<div class="next"><a class="primary" href="/">{escape(copy['back'])} →</a></div></main>
-<footer><div class="shell footer-inner"><div><a class="brand" href="/"><img class="brand-mark" src="/assets/rabbit-mark.svg" alt=""> <strong>PoseToki</strong></a><small class="operator-note">{escape(operation['operator'])}</small></div><nav aria-label="{escape(copy['a11y']['info'])}">{nav}</nav><div class="contact"><a href="{page_href(lang, 'about')}#feedback">{escape(copy['contact'])}</a><small>{escape(copy['contact_note'])}</small></div></div></footer>
+<article class="{'catalog-article' if slug == 'poses' else 'lesson-article' if slug in LESSON_SLUGS else ''}"><p class="eyebrow">PoseToki · {escape(operation['nav'] if slug == 'about' else copy['nav'].get(slug, copy['nav']['guide']))}</p><h1>{escape(title)}</h1><p class="lead">{escape(article['lead'])}</p>{byline(lang)}<p class="updated"><time datetime="2026-10-02">{escape(copy['updated'])}</time></p>{body}</article>
+<div class="next"><a class="primary" href="{HOME[lang]}">{escape(copy['back'])} →</a></div></main>
+<footer><div class="shell footer-inner"><div><a class="brand" href="{HOME[lang]}"><img class="brand-mark" src="/assets/rabbit-mark.svg" alt=""> <strong>PoseToki</strong></a><small class="operator-note">{escape(operation['operator'])}</small></div><nav aria-label="{escape(copy['a11y']['info'])}">{nav}</nav><div class="contact"><a href="{page_href(lang, 'about')}#feedback">{escape(copy['contact'])}</a><small>{escape(copy['contact_note'])}</small></div></div></footer>
 <script>try{{localStorage.setItem('posetoki-lang',document.documentElement.lang)}}catch{{}}</script>
 </body></html>
 """
 
 
 def main() -> None:
-    urls = [f"{ORIGIN}/"]
+    urls = [ORIGIN + href for href in HOME.values()]
     for lang, path in LANGS.items():
         target = DIST / path
         target.mkdir(parents=True, exist_ok=True)
-        for slug in (*SLUGS, *LESSON_SLUGS):
+        for slug in (*SLUGS, *LESSON_SLUGS, *EXTRA_SLUGS):
             (target / f"{slug}.html").write_text(render(lang, slug), encoding="utf-8")
             urls.append(page_url(lang, slug))
-    sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-    sitemap += "".join(f"  <url><loc>{url}</loc></url>\n" for url in urls)
+    sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n'
+    for url in urls:
+        images = ''.join(f'<image:image><image:loc>{ORIGIN}{p["image"]}</image:loc></image:image>' for p in load_poses()) if url == page_url('ko', 'poses') else ''
+        sitemap += f'  <url><loc>{url}</loc><lastmod>2026-10-02</lastmod>{images}</url>\n'
     sitemap += "</urlset>\n"
     (DIST / "sitemap.xml").write_text(sitemap, encoding="utf-8")
     (DIST / "robots.txt").write_text(
-        f"User-agent: *\nAllow: /\nSitemap: {ORIGIN}/sitemap.xml\n", encoding="utf-8"
+        '# Public search and AI discovery are permitted.\n'
+        'User-agent: OAI-SearchBot\nAllow: /\n\n'
+        'User-agent: ChatGPT-User\nAllow: /\n\n'
+        '# This token covers Gemini grounding and model training, not Search rankings.\n'
+        'User-agent: Google-Extended\nAllow: /\n\n'
+        f'User-agent: *\nAllow: /\n\nSitemap: {ORIGIN}/sitemap.xml\n', encoding="utf-8"
     )
 
 
