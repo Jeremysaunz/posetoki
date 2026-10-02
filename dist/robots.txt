@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://posetoki.vercel.app/sitemap.xml
