@@ -1,0 +1,37 @@
+.lesson-index { margin-top: 42px; }
+.lesson-index > p { color: #625d57; }
+.lesson-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 18px; }
+.lesson-card { display: flex; flex-direction: column; gap: 9px; padding: 18px; border: 1px solid #ded5e8; border-radius: 12px; background: #f6f2fa; text-decoration: none; color: var(--ink); }
+.lesson-card strong { font-size: 16px; line-height: 1.45; color: var(--purple); }
+.lesson-card span { font-size: 13px; line-height: 1.6; color: #68616a; }
+.lesson-card:hover, .lesson-card:focus-visible { background: #eee6f6; border-color: var(--purple); }
+.lesson-example { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 24px; align-items: start; }
+.lesson-photo { margin: 0; }
+.lesson-photo img { display: block; width: 100%; height: auto; border-radius: 10px; background: #e6e5e2; }
+.photo-frame { position: relative; }
+.photo-marker { position: absolute; display: grid; place-items: center; transform: translate(-50%, -50%); width: 28px; height: 28px; border: 2px solid white; border-radius: 50%; background: var(--purple); color: white; font-size: 13px; font-weight: 700; box-shadow: 0 2px 7px #34243f8c; }
+.lesson-photo figcaption { margin-top: 9px; color: #68615b; font-size: 13px; line-height: 1.55; }
+.focus-card { padding: 22px 22px 18px; border-radius: 12px; background: #f3eff8; }
+.focus-card h2 { font-size: 18px; }
+.focus-card ol { counter-reset: focus; list-style: none; padding: 0; margin: 0; }
+.focus-card li { counter-increment: focus; position: relative; padding-left: 36px; margin: 0 0 18px; font-size: 14px; line-height: 1.65; }
+.focus-card li:last-child { margin-bottom: 0; }
+.focus-card li::before { content: counter(focus); position: absolute; left: 0; top: 1px; display: grid; place-items: center; width: 25px; height: 25px; border-radius: 50%; background: var(--purple); color: #fff; font-size: 12px; font-weight: 700; }
+.source-note { font-size: 13px; color: #756e68; margin: 15px 0 30px; }
+.timing-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding: 0; list-style: none; }
+.timing-list li { padding: 17px; border: 1px solid var(--line); border-radius: 10px; background: #fff; margin: 0; }
+.timing-list strong { display: block; color: var(--purple); font-size: 16px; margin-bottom: 8px; }
+.timing-list p { font-size: 14px; line-height: 1.6; }
+.transfer-example { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 22px; align-items: start; }
+.transfer-example > p { margin-top: 0; }
+.practice-callout { padding: 26px !important; border: 1px solid #e4d7ef !important; border-radius: 12px; background: #f4eef9; }
+.practice-callout .primary { margin-top: 8px; }
+.lesson-article > .lesson-index { padding-top: 34px; border-top: 1px solid var(--line); }
+.lesson-article .lesson-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 720px) {
+  .lesson-cards, .lesson-article .lesson-cards, .timing-list { grid-template-columns: 1fr; }
+  .lesson-example, .transfer-example { grid-template-columns: 1fr; }
+  .lesson-photo { max-width: 320px; margin: 0 auto; }
+  .transfer-example .lesson-photo { max-width: 240px; margin: 0; }
+  .focus-card { padding: 20px; }
+}

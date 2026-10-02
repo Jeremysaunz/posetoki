@@ -1,2 +1,6 @@
 .vercel/
 .vercel
+
+# Python build caches
+__pycache__/
+*.py[cod]
