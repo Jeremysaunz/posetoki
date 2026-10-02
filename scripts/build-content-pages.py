@@ -10,7 +10,7 @@ from operations_content import OPERATIONS, operation_sections
 
 ROOT = Path(__file__).resolve().parents[1]
 DIST = ROOT / "dist"
-ORIGIN = "https://posetoki.vercel.app"
+ORIGIN = "https://posetoki.com"
 LANGS = {"ko": "ko", "ja": "ja", "en": "en", "zh-TW": "zh-tw"}
 NAMES = {"ko": "한국어", "ja": "日本語", "en": "English", "zh-TW": "繁體中文"}
 SLUGS = ("guide", "about", "privacy")
@@ -285,6 +285,7 @@ def render(lang: str, slug: str) -> str:
 <html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{escape(title)} | PoseToki</title>
 <meta name="description" content="{escape(article['description'], quote=True)}">
+<meta name="google-adsense-account" content="ca-pub-5987896746147751">
 <link rel="canonical" href="{page_url(lang, slug)}">
 {alternates}
 <link rel="icon" type="image/svg+xml" href="/assets/rabbit-mark.svg">
