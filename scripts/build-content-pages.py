@@ -286,6 +286,7 @@ def render(lang: str, slug: str) -> str:
 <title>{escape(title)} | PoseToki</title>
 <meta name="description" content="{escape(article['description'], quote=True)}">
 <meta name="google-adsense-account" content="ca-pub-5987896746147751">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5987896746147751" crossorigin="anonymous"></script>
 <link rel="canonical" href="{page_url(lang, slug)}">
 {alternates}
 <link rel="icon" type="image/svg+xml" href="/assets/rabbit-mark.svg">
