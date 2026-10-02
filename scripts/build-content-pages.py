@@ -226,6 +226,7 @@ def render(lang: str, slug: str) -> str:
 <meta name="description" content="{escape(article['description'], quote=True)}">
 <link rel="canonical" href="{page_url(lang, slug)}">
 {alternates}
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%237a54ad'/%3E%3Cpath d='M11 18V7M21 18V7' stroke='white' stroke-width='5' stroke-linecap='round'/%3E%3Ccircle cx='16' cy='22' r='8' fill='white'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="/content.css?v=1">
 </head><body>
 <a class="skip" href="#content">{escape(copy['a11y']['skip'])}</a>
