@@ -152,8 +152,9 @@
 :root .course,:root .course.purple{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:26px 24px;box-shadow:none;transform:none}
 :root .course:hover{transform:none;border-color:var(--ink)}
 :root .course.purple{border-color:var(--ink);padding-top:26px}
-:root .course-icon.rhythm{display:block;height:12px;width:calc(var(--total) / 15 * 64%);margin:0 0 26px;font-size:0;color:var(--ink);background:repeating-linear-gradient(90deg,currentColor 0 calc(100% / var(--n) - 3px),transparent 0 calc(100% / var(--n)))}
-:root .purple .course-icon.rhythm{color:var(--blue-ink)}
+:root .course-icon.rhythm{position:relative;display:block;height:12px;width:calc(var(--total) / 15 * 64%);margin:0 0 26px;font-size:0;--bar:var(--ink);background:repeating-linear-gradient(90deg,var(--line) 0 calc(100% / var(--n) - 3px),transparent 0 calc(100% / var(--n)))}
+:root .course-icon.rhythm:after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,var(--bar) 0 calc(100% / var(--n) - 3px),transparent 0 calc(100% / var(--n)))}
+:root .purple .course-icon.rhythm{--bar:var(--blue-ink)}
 :root .tag,:root .purple .tag{background:var(--board);color:var(--muted);border-radius:3px;font-size:11px;font-weight:600}
 :root .purple .tag{background:var(--blue-wash);color:var(--blue-ink)}
 :root .course h3{font-size:19px;font-weight:800;letter-spacing:-.03em;color:var(--ink)}
@@ -244,9 +245,63 @@
   :root .intro>p{font-size:14px;line-height:1.75}
   :root .intro-note{font-size:12px}
   :root .hero-cta{margin-top:24px}
-  :root .hero-figure figcaption{display:none}
+  :root .hero-figure figcaption #heroCode,:root .hero-figure figcaption #heroName{display:none}
   :root .construction .tag{font-size:40px;stroke-width:12px}
   :root .hero-cta{width:100%;justify-content:center}
   :root .time-options button:before{font-size:22px}
   :root .course b,:root .purple b{font-size:28px}
+}
+
+/* ---- Motion ---------------------------------------------------------- */
+/* Hero demo: lines redraw for each pose; the timer line runs out under the sheet. */
+:root .hero-figure.reset .construction *,:root .hero-figure.reset .figure-timer b{animation:none!important}
+:root .figure-sheet picture,:root .figure-sheet .construction{transition:opacity .28s ease}
+:root .figure-sheet.swap picture,:root .figure-sheet.swap .construction{opacity:0}
+:root .figure-timer{display:none;position:absolute;left:0;right:0;bottom:0;height:4px;background:rgba(127,184,227,.25)}
+:root .hero-figure.is-live .figure-timer{display:block}
+:root .figure-timer b{display:block;height:100%;background:var(--blue-ink);transform-origin:left center;transform:scaleX(0);animation:hero-timer 6.5s linear forwards}
+@keyframes hero-timer{to{transform:scaleX(1)}}
+:root .hero-figure figcaption{align-items:center;min-height:30px}
+:root .motion-toggle{margin-left:auto;flex:none;padding:5px 10px;border:1px solid var(--line);border-radius:3px;background:transparent;color:var(--muted);font-size:12px;cursor:pointer}
+:root .motion-toggle:hover{color:var(--ink);border-color:var(--ink)}
+
+/* Contact sheet: a slow strip of poses with frame numbers, like a proof sheet */
+:root .contact-sheet{display:block;width:100%;margin:0 0 56px;padding:18px 0 14px;border:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:transparent;color:var(--ink);text-align:left;cursor:pointer;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent)}
+:root .sheet-track{display:flex;width:max-content;animation:sheet-roll 110s linear infinite}
+:root .sheet-run{display:flex;gap:10px;padding-right:10px}
+:root .frame{display:flex;flex-direction:column;gap:7px}
+:root .frame img{display:block;height:132px;width:auto;background:var(--board);filter:grayscale(1) contrast(.95);transition:filter .3s ease}
+:root .frame span{font:600 11px/1 var(--num);font-stretch:80%;color:var(--muted)}
+:root .contact-sheet:hover .frame img,:root .contact-sheet:focus-visible .frame img{filter:none}
+:root .contact-sheet:hover .sheet-track,:root .contact-sheet:focus-visible .sheet-track{animation-play-state:paused}
+:root .sheet-caption{display:block;padding:14px 5% 0;font-size:14px;font-weight:700;color:var(--ink)}
+:root .contact-sheet:hover .sheet-caption{color:var(--blue-ink)}
+@keyframes sheet-roll{to{transform:translateX(-50%)}}
+
+/* Course schedules play through one pose at a time */
+:root .rhythm-ready .course-icon.rhythm:after{clip-path:inset(0 100% 0 0)}
+:root .rhythm-ready .is-playing .course-icon.rhythm:after{animation:rhythm-play calc(var(--total) * .16s) steps(var(--n),end) forwards}
+@keyframes rhythm-play{to{clip-path:inset(0 0 0 0)}}
+
+:root.motion-paused .construction *,:root.motion-paused .figure-timer b,:root.motion-paused .sheet-track{animation-play-state:paused!important}
+@media(prefers-reduced-motion:reduce){
+  :root .sheet-track,:root .figure-timer b{animation:none!important}
+  :root .rhythm-ready .course-icon.rhythm:after{clip-path:none;animation:none}
+}
+@media(max-width:600px){
+  :root .frame img{height:96px}
+  :root .contact-sheet{margin-bottom:40px}
+  :root .motion-toggle{margin-left:0;width:100%}
+}
+
+/* Headline: it first appears as a blue underdrawing, then each line is inked in graphite, left to right. */
+:root .intro h1 .hero-line{display:block;width:fit-content;max-width:100%}
+@supports ((-webkit-background-clip:text) or (background-clip:text)){
+  :root .intro h1 .hero-line{color:transparent;-webkit-text-stroke:1.4px var(--blue);background-image:linear-gradient(90deg,var(--ink),var(--ink));background-repeat:no-repeat;background-position:0 0;background-size:0% 100%;-webkit-background-clip:text;background-clip:text;animation:hero-ink 1.05s cubic-bezier(.65,0,.25,1) .45s forwards,hero-unsketch .7s ease 1.3s forwards}
+  :root .intro h1 .hero-line+.hero-line{animation-delay:.95s,1.8s}
+}
+@keyframes hero-ink{to{background-size:100% 100%}}
+@keyframes hero-unsketch{to{-webkit-text-stroke-color:transparent}}
+@media(prefers-reduced-motion:reduce){
+  :root .intro h1 .hero-line{animation:none!important;color:var(--ink);-webkit-text-stroke:0;background:none}
 }

@@ -300,11 +300,16 @@ def render(lang: str, slug: str) -> str:
 {alternates}
 {seo}
 <link rel="icon" type="image/svg+xml" href="/assets/rabbit-mark.svg">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..700&amp;display=swap">
 <link rel="stylesheet" href="/content.css?v=3">
 {lesson_style}
+<link rel="stylesheet" href="/sketch-content.css?v=1">
+<script src="/theme.js?v=1"></script>
 </head><body>
 <a class="skip" href="#content">{escape(copy['a11y']['skip'])}</a>
-<header class="site-header"><div class="shell top"><a class="brand" href="{HOME[lang]}"><img class="brand-mark" src="/assets/rabbit-mark.svg" alt=""> <strong>PoseToki</strong></a><nav aria-label="{escape(copy['a11y']['main_nav'])}"><a href="{HOME[lang]}">{escape(copy['nav']['studio'])}</a>{nav}</nav></div></header>
+<header class="site-header"><div class="shell top"><a class="brand" href="{HOME[lang]}"><img class="brand-mark" src="/assets/rabbit-mark.svg" alt=""> <strong>PoseToki</strong></a><div class="header-tools"><nav aria-label="{escape(copy['a11y']['main_nav'])}"><a href="{HOME[lang]}">{escape(copy['nav']['studio'])}</a>{nav}</nav>{theme_toggle(lang)}</div></div></header>
 <main class="shell" id="content"><div class="language-links" aria-label="{escape(copy['a11y']['languages'])}">{languages}</div>
 <article class="{'catalog-article' if slug == 'poses' else 'lesson-article' if slug in LESSON_SLUGS else ''}"><p class="eyebrow">PoseToki · {escape(operation['nav'] if slug == 'about' else copy['nav'].get(slug, copy['nav']['guide']))}</p><h1>{escape(title)}</h1><p class="lead">{escape(article['lead'])}</p>{byline(lang)}<p class="updated"><time datetime="2026-10-02">{escape(copy['updated'])}</time></p>{body}</article>
 <div class="next"><a class="primary" href="{HOME[lang]}">{escape(copy['back'])} →</a></div></main>
@@ -312,6 +317,17 @@ def render(lang: str, slug: str) -> str:
 <script>try{{localStorage.setItem('posetoki-lang',document.documentElement.lang)}}catch{{}}</script>
 </body></html>
 """
+
+
+THEME_LABELS = {'ko': '다크 모드로 전환', 'ja': 'ダークモードに切り替え', 'en': 'Switch to dark mode', 'zh-TW': '切換深色模式'}
+
+
+def theme_toggle(lang: str) -> str:
+    """Same light/dark control as the homepage; theme.js keeps its label in sync."""
+    label = THEME_LABELS[lang]
+    return (f'<button class="theme-toggle" type="button" aria-label="{label}" title="{label}" aria-pressed="false">'
+            '<svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15a8.5 8.5 0 0 1-11-11A8.5 8.5 0 1 0 20 15Z"/></svg>'
+            '<svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></button>')
 
 
 def main() -> None:

@@ -13,10 +13,10 @@ from seo_common import HOME, ORIGIN, LANGS, metadata, jsonld
 ROOT = Path(__file__).resolve().parents[1]
 COL = {'ko': 0, 'ja': 1, 'en': 2, 'zh-TW': 3}
 HERO = {
- 'ko': '보고, 그리고.<br>매일의 <em>크로키 연습.</em>',
- 'ja': '見て、描く。<br>毎日の<em>クロッキー練習。</em>',
- 'en': 'Look. Draw.<br>Your daily <em>gesture practice.</em>',
- 'zh-TW': '看一看，畫下來。<br>每天的<em>人物速寫練習。</em>',
+ 'ko': '<span class="hero-line">보고, 그리고.</span> <span class="hero-line">매일의 크로키 연습.</span>',
+ 'ja': '<span class="hero-line">見て、描く。</span> <span class="hero-line">毎日のクロッキー練習。</span>',
+ 'en': '<span class="hero-line">Look. Draw.</span> <span class="hero-line">Your daily gesture practice.</span>',
+ 'zh-TW': '<span class="hero-line">看一看，畫下來。</span> <span class="hero-line">每天的人物速寫練習。</span>',
 }
 FACTS = {
  'ko': ['무료 크로키 타이머 · 120개 인체 포즈', '포즈토키는 미술·웹툰·일러스트 학습자를 위한 무료 크로키 연습 도구입니다. 30초·1분·3분 타이머로 준비된 AI 착의 인물 포즈 또는 내 사진을 보며 연습하세요. 회원가입과 연습 횟수 제한이 없습니다.'],
@@ -81,6 +81,19 @@ def learning(lang):
     return f'<section class="learning" id="learn"><div class="section-title"><div><div class="eyebrow">{labels[0]}</div><h2>{labels[1]}</h2></div></div><div class="learning-grid">{cards}</div><a class="catalog-link" data-localized-page="poses" href="/{path}/poses.html"><strong>{labels[2]} →</strong><span>{labels[3]}</span></a></section>'
 
 
+def contact_sheet(lang, parser):
+    """A moving contact sheet of every fourth pose; it opens the full library."""
+    frames=''
+    for pose in load_poses()[::4]:
+        w=round(pose['width']*132/pose['height'])
+        frames+=f'<span class="frame"><img src="{pose["thumbWebp"]}" alt="" width="{w}" height="132" loading="lazy" decoding="async"><span>{pose["id"]}</span></span>'
+    label=escape(parser.translate('120개 포즈 둘러보기'),quote=True)
+    caption=escape(parser.translate('120개 포즈 둘러보기'))
+    return (f'<button type="button" class="contact-sheet" id="contactSheet" aria-label="{label}">'
+            f'<span class="sheet-track"><span class="sheet-run">{frames}</span><span class="sheet-run" aria-hidden="true">{frames}</span></span>'
+            f'<span class="sheet-caption">{caption}</span></button>')
+
+
 def render(lang, template, dictionary):
     parser=Localize(lang,dictionary);parser.feed(template);s=''.join(parser.parts)
     url=ORIGIN+HOME[lang]
@@ -88,11 +101,12 @@ def render(lang, template, dictionary):
     s=re.sub(r'<span id="imageLabel">.*?</span>',f'<span id="imageLabel">PT001 / 120 · {escape(pose["name"][lang])}</span>',s)
     estimate={'ko':'10장 · 약 10분','ja':'10枚 · 約10分','en':'10 poses · about 10 min','zh-TW':'10 張 · 約10分鐘'}
     s=re.sub(r'<strong id="estimate">.*?</strong>',f'<strong id="estimate">{estimate[lang]}</strong>',s)
-    s=re.sub(r'<h1 id="heroTitle">.*?</h1>',f'<h1 id="heroTitle">{HERO[lang]}</h1>',s,flags=re.S)
+    s=re.sub(r'<h1 id="heroTitle">.*?</h1>',f'<h1 id="heroTitle" data-lang="{lang}">{HERO[lang]}</h1>',s,flags=re.S)
     s=re.sub(r'<link rel="canonical"[^>]*>',f'<link rel="canonical" href="{url}">',s)
     s=re.sub(r'<div class="eyebrow"><span></span>.*?</div>',f'<div class="eyebrow"><span></span>{FACTS[lang][0]}</div>',s,count=1)
     s=s.replace('<section class="guide"',learning(lang)+'<section class="guide"',1)
     s=s.replace('</section>\n<section class="workspace"',f'<p class="service-summary">{FACTS[lang][1]}</p></section>\n<section class="workspace"',1)
+    s=s.replace('<section class="workspace"',contact_sheet(lang,parser)+'<section class="workspace"',1)
     names={'ko':'한국어','ja':'日本語','en':'English','zh-TW':'繁體中文'}
     links=''.join(f'<a href="{href}" hreflang="{code}" lang="{code}"'+(' aria-current="page"' if code==lang else '')+f'>{names[code]}</a>' for code,href in HOME.items())
     s=s.replace('<footer>',f'<nav class="home-languages" aria-label="{LABELS[lang][4]}">{links}</nav><footer>',1)

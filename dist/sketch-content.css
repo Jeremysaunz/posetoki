@@ -1,0 +1,90 @@
+/*
+  Guides, lessons and the pose library in the same sketchbook identity as the
+  homepage: graphite on drawing paper, non-photo blue for construction marks.
+  Layered over content.css and lesson.css; :root keeps it ahead of them.
+*/
+:root{
+  --paper:#fcfcfa;--board:#eef1f1;--ink:#1d2125;--muted:#5d656c;--line:#dadfe1;
+  --blue:#7fb8e3;--blue-ink:#1b67ad;--blue-wash:#e7f1fa;--grid:rgba(127,184,227,.2);
+  --purple:var(--blue-ink);
+  --sans:'Pretendard Variable',Pretendard,'Hiragino Sans','Yu Gothic','Meiryo','PingFang TC','Microsoft JhengHei','Noto Sans KR','Noto Sans JP','Noto Sans TC',system-ui,sans-serif;
+  --num:'Archivo','Pretendard Variable',system-ui,sans-serif;
+}
+:root[data-theme=dark]{
+  color-scheme:dark;
+  --paper:#141719;--board:#1c2023;--ink:#e8ebed;--muted:#a0a9b0;--line:#30363b;
+  --blue:#5e9fd2;--blue-ink:#8fc4ef;--blue-wash:#192a38;--grid:rgba(94,159,210,.13);
+}
+:root body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:16px;line-height:1.8;-webkit-font-smoothing:antialiased}
+:root:lang(ko) body{word-break:keep-all}
+:root a{color:var(--blue-ink)}
+:root :focus-visible{outline:2px solid var(--blue-ink);outline-offset:3px}
+:root .skip{background:var(--paper);color:var(--ink)}
+
+/* Header */
+:root .site-header{background:var(--paper);border-bottom:1px solid var(--line)}
+:root .top{min-height:76px}
+:root .brand,:root .brand strong{color:var(--ink);font-weight:800;letter-spacing:-.04em}
+:root .site-header nav{align-items:center}
+:root .site-header nav a,:root .footer-inner nav a{color:var(--muted);font-weight:500}
+:root .site-header nav a:hover,:root .footer-inner nav a:hover{color:var(--ink)}
+:root .site-header nav a[aria-current=page],:root .footer-inner nav a[aria-current=page]{color:var(--ink);font-weight:700;text-decoration:underline;text-decoration-color:var(--blue-ink);text-decoration-thickness:2px;text-underline-offset:8px}
+:root .header-tools{display:flex;align-items:center;gap:22px}
+:root .theme-toggle{width:36px;height:36px;flex:none;display:inline-flex;align-items:center;justify-content:center;padding:8px;border:1px solid var(--line);border-radius:4px;background:transparent;color:var(--ink);cursor:pointer}
+:root .theme-toggle:hover{background:var(--board)}
+:root .theme-toggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+:root .theme-toggle .sun{display:none}
+:root[data-theme=dark] .theme-toggle .sun{display:block}
+:root[data-theme=dark] .theme-toggle .moon{display:none}
+:root .language-links a{color:var(--muted)}
+:root .language-links a[aria-current=page]{color:var(--ink);text-decoration-color:var(--blue-ink)}
+
+/* Article */
+:root article .eyebrow{font-size:13px;font-weight:600;letter-spacing:0;color:var(--muted)}
+:root h1{font-size:clamp(34px,5.2vw,56px);line-height:1.15;letter-spacing:-.05em;font-weight:800;color:var(--ink)}
+:root h2{font-size:24px;line-height:1.4;letter-spacing:-.035em;font-weight:800;color:var(--ink)}
+:root h3{letter-spacing:-.02em}
+:root .lead{font-size:19px;line-height:1.8;color:var(--muted)}
+:root .updated,:root .byline,:root .source-note{color:var(--muted)}
+:root article section{border-top:1px solid var(--line)}
+:root code{background:var(--blue-wash);color:var(--ink);border-radius:3px}
+:root .primary{background:var(--ink);color:var(--paper);border-radius:4px;padding:15px 22px;font-size:15px}
+:root .primary:hover{background:var(--blue-ink)}
+
+/* Lesson photos read as reference sheets: photo on a blue-grid board, numbered pins in construction blue */
+:root .lesson-photo img{border-radius:0;background-color:var(--board)}
+:root .photo-frame{background-color:var(--board);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px;border:1px solid var(--line)}
+:root .photo-marker{background:var(--blue-ink);border:2px solid var(--paper);box-shadow:0 0 0 2px var(--blue-ink);font:600 13px var(--num);color:var(--paper)}
+:root .lesson-photo figcaption{color:var(--muted)}
+:root .focus-card{background:var(--paper);border:1px solid var(--line);border-left:3px solid var(--blue);border-radius:0 6px 6px 0}
+:root .focus-card li::before{background:var(--blue-ink);color:var(--paper);font-family:var(--num);font-weight:600}
+:root .timing-list li{background:var(--paper);border:1px solid var(--line);border-radius:6px}
+:root .timing-list strong{color:var(--ink);font-weight:800}
+:root .practice-callout{background:var(--board)!important;border:1px solid var(--line)!important;border-radius:6px}
+:root .lesson-card{background:var(--paper);border:1px solid var(--line);border-radius:6px;color:var(--ink)}
+:root .lesson-card strong{color:var(--ink);font-weight:700}
+:root .lesson-card span{color:var(--muted)}
+:root .lesson-card:hover,:root .lesson-card:focus-visible{background:var(--paper);border-color:var(--ink)}
+:root .lesson-index>p{color:var(--muted)}
+
+/* Pose library */
+:root .reference-card{background:var(--paper);border:1px solid var(--line);border-radius:4px}
+:root .reference-card img{background-color:var(--board);border-radius:0}
+:root .reference-card small{color:var(--blue-ink);font-size:12px}
+:root .reference-card h3{color:var(--ink);font-weight:700}
+:root .reference-card p{color:var(--muted)}
+:root .catalog-jump a{background:var(--board);color:var(--ink);border:1px solid transparent;border-radius:3px}
+:root .catalog-jump a:hover{border-color:var(--ink)}
+:root th,:root td{border-color:var(--line)}
+:root thead{background:var(--board)}
+
+/* Footer */
+:root footer{background:var(--paper);border-top:1px solid var(--line)}
+:root .contact small,:root .operator-note{color:var(--muted)}
+:root .contact a{color:var(--ink)}
+
+@media(max-width:720px){
+  :root .header-tools{width:100%;justify-content:space-between;gap:12px}
+  :root .lead{font-size:17px}
+  :root h2{font-size:21px}
+}
