@@ -103,7 +103,7 @@ def render(lang, template, dictionary):
       {'@type':'WebApplication','@id':url+'#app','name':'PoseToki','url':url,'description':FACTS[lang][1],'inLanguage':lang,'applicationCategory':'EducationalApplication','operatingSystem':'Web browser','browserRequirements':'JavaScript enabled','isAccessibleForFree':True,'offers':{'@type':'Offer','price':'0','priceCurrency':'USD'},'featureList':['120 AI-generated clothed figure references','30-second, 1-minute, 3-minute and custom timers','Local photo practice without uploads','No sign-up, unlimited sessions'],'publisher':{'@type':'Person','@id':ORIGIN+'/#jeremy','name':'Jeremy','url':f'{ORIGIN}/{LANGS[lang]}/about.html#operator'}},
     ]}
     alternates=''.join(f'<link rel="alternate" hreflang="{code}" href="{ORIGIN+href}">' for code,href in HOME.items())+f'<link rel="alternate" hreflang="x-default" href="{ORIGIN}/">'
-    s=s.replace('</head>',metadata(lang,title,desc,url)+'\n'+alternates+'\n'+jsonld(schema).replace('<script type=','<script id="site-schema" type=')+'\n<link rel="preload" as="image" href="/assets/pose-01.webp" type="image/webp" fetchpriority="high">\n</head>',1)
+    s=s.replace('</head>',metadata(lang,title,desc,url)+'\n'+alternates+'\n'+jsonld(schema).replace('<script type=','<script id="site-schema" type=')+'\n<link rel="preload" as="image" href="/assets/library/PT029.webp" type="image/webp" fetchpriority="high">\n</head>',1)
     return s
 
 
