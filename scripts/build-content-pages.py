@@ -241,13 +241,13 @@ def render_lesson(lang: str, slug: str) -> str:
     practice_href = f"{HOME[lang]}?poseId={pose}&amp;seconds={seconds}&amp;count=5&amp;category={category}#practice"
     return f"""
 <div class="lesson-example">
-  <figure class="lesson-photo"><div class="photo-frame"><img src="/assets/{photo}" width="768" height="1536" loading="lazy" decoding="async" alt="{escape(alt, quote=True)}">{markers}</div><figcaption>{escape(caption)}</figcaption></figure>
+  <figure class="lesson-photo"><div class="photo-frame"><picture><source type="image/webp" srcset="/assets/{photo.rsplit('.', 1)[0]}.webp"><img src="/assets/{photo}" width="768" height="1536" loading="lazy" decoding="async" alt="{escape(alt, quote=True)}"></picture>{markers}</div><figcaption>{escape(caption)}</figcaption></figure>
   <div class="focus-card"><h2>{escape(copy['focus_title'])}</h2><ol>{focus}</ol></div>
 </div>
 <p class="source-note">{escape(copy['source_note'])}</p>
 <section><h2>{escape(copy['timing_title'])}</h2><ol class="timing-list">{timing}</ol></section>
 <section><h2>{escape(copy['mistake_title'])}</h2><p>{escape(lesson['mistake'])}</p></section>
-<section><h2>{escape(copy['transfer_title'])}</h2><div class="transfer-example"><figure class="lesson-photo secondary-photo"><img src="/assets/{second_photo}" width="768" height="1536" loading="lazy" decoding="async" alt="{escape(second_alt, quote=True)}"><figcaption>{escape(second_caption)}</figcaption></figure><p>{escape(lesson['transfer'])}</p></div></section>
+<section><h2>{escape(copy['transfer_title'])}</h2><div class="transfer-example"><figure class="lesson-photo secondary-photo"><picture><source type="image/webp" srcset="/assets/{second_photo.rsplit('.', 1)[0]}.webp"><img src="/assets/{second_photo}" width="768" height="1536" loading="lazy" decoding="async" alt="{escape(second_alt, quote=True)}"></picture><figcaption>{escape(second_caption)}</figcaption></figure><p>{escape(lesson['transfer'])}</p></div></section>
 <section><h2>{escape(copy['review_title'])}</h2><ul>{review}</ul></section>
 <section class="practice-callout"><h2>{escape(copy['practice_title'])}</h2><p>{escape(lesson['practice'])}</p><a class="primary" href="{practice_href}">{escape(COPY[lang]['back'])} →</a></section>
 """

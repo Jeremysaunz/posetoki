@@ -110,7 +110,7 @@ def render_catalog(lang):
         for pose in [p for p in poses if p['category'] == code]:
             level = copy['level'][('beginner','intermediate','advanced').index(pose['level'])]
             href = f'{HOME[lang]}?poseId={pose["id"]}&amp;category={code}&amp;seconds={pose["seconds"]}&amp;count=5#practice'
-            cards += f'<article class="reference-card" id="{pose["id"]}"><img src="{pose["thumb"]}" width="256" height="384" loading="lazy" decoding="async" alt="{escape(pose["name"][lang], quote=True)}"><div><small>{pose["id"]} · {escape(level)} · {pose["seconds"]}{copy["seconds"]}</small><h3>{escape(pose["name"][lang])}</h3><p>{escape(pose["focus"][lang])}</p><a href="{href}">{escape(copy["start"])} →</a></div></article>'
+            cards += f'<article class="reference-card" id="{pose["id"]}"><picture><source type="image/webp" srcset="{pose["thumbWebp"]}"><img src="{pose["thumb"]}" width="256" height="384" loading="lazy" decoding="async" alt="{escape(pose["name"][lang], quote=True)}"></picture><div><small>{pose["id"]} · {escape(level)} · {pose["seconds"]}{copy["seconds"]}</small><h3>{escape(pose["name"][lang])}</h3><p>{escape(pose["focus"][lang])}</p><a href="{href}">{escape(copy["start"])} →</a></div></article>'
         body += f'<section id="type-{code.lower()}"><h2>{escape(names[column])}</h2><div class="reference-grid">{cards}</div></section>'
     body += f'<section><h2>{escape(copy["limit_title"])}</h2><p>{escape(copy["limit"])}</p><a href="/{"zh-tw" if lang=="zh-TW" else lang}/about.html#feedback">{escape({'ko':'자료 문제 제보','ja':'資料の問題を報告','en':'Report a reference issue','zh-TW':'回報素材問題'}[lang])}</a></section>'
     return body

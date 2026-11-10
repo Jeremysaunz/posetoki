@@ -28,6 +28,9 @@ for pose in catalog:
         target = ROOT / 'dist/assets/thumbs' / f'{identifier}.jpg'
         target.parent.mkdir(parents=True, exist_ok=True)
         thumb.save(target, quality=80, optimize=True)
+        # WebP copies sit next to each JPG. JPG stays for sharing previews and older browsers.
+        thumb.save(target.with_suffix('.webp'), 'WEBP', quality=78, method=6)
+        im.convert('RGB').save(path.with_suffix('.webp'), 'WEBP', quality=80, method=6)
     en, ja, zh, fen, fja, fzh = translations[identifier]
     records.append({
         'id': identifier, 'category': pose['category_code'],
@@ -35,6 +38,7 @@ for pose in catalog:
         'focus': {'ko': pose['learning_focus'], 'en': fen, 'ja': fja, 'zh-TW': fzh},
         'level': levels[pose['difficulty']], 'seconds': pose['recommended_seconds'],
         'image': image_path, 'thumb': f'/assets/thumbs/{identifier}.jpg',
+        'webp': str(Path(image_path).with_suffix('.webp')), 'thumbWebp': f'/assets/thumbs/{identifier}.webp',
         'width': width, 'height': height, 'source': 'AI-generated',
         'legacy': int(Path(existing).stem.split('-')[1]) if existing else None,
     })

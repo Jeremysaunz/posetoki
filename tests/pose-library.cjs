@@ -11,6 +11,8 @@ const hashes = new Set();
 for (const pose of poses) {
   assert(fs.existsSync(path.join(root, pose.image)));
   assert(fs.existsSync(path.join(root, pose.thumb)));
+  assert(fs.existsSync(path.join(root, pose.webp)), `${pose.id}: missing WebP`);
+  assert(fs.existsSync(path.join(root, pose.thumbWebp)), `${pose.id}: missing WebP thumbnail`);
   const hash = crypto.createHash('sha256').update(fs.readFileSync(path.join(root, pose.image))).digest('hex');
   assert(!hashes.has(hash), `Duplicated file: ${pose.id}`);
   hashes.add(hash);
@@ -24,4 +26,4 @@ for (const category of ['ST', 'WK', 'DY', 'TR', 'CH', 'FL', 'LY', 'FP', 'DA', 'E
   assert.equal(poses.filter(pose => pose.category === category).length, 12);
 }
 assert.equal(poses.filter(pose => pose.legacy !== null).length, 21);
-console.log('120 distinct image files, 10 categories of 12, four-language metadata, thumbnails and legacy links verified.');
+console.log('120 distinct image files, 10 categories of 12, four-language metadata, thumbnails, WebP copies and legacy links verified.');

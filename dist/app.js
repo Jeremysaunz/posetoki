@@ -60,9 +60,26 @@ let zoomed = false;
 let seen = new Set();
 let audio = null;
 
+const webpBackground = window.CSS?.supports?.('background-image', 'image-set(url("a.webp") type("image/webp"))') ?? false;
+let nextImage = null;
+
+function poseBackground(pose) {
+  return webpBackground && pose.webp
+    ? `image-set(url("${pose.webp}") type("image/webp"), url("${pose.image}") type("image/jpeg"))`
+    : `url("${pose.image}")`;
+}
+
+function preloadPose(poseIndex) {
+  const pose = library[poseIndex];
+  if (!pose) return;
+  nextImage = new Image();
+  nextImage.decoding = 'async';
+  nextImage.src = webpBackground && pose.webp ? pose.webp : pose.image;
+}
+
 function setPose(el, poseIndex) {
   const pose = library[poseIndex];
-  el.style.backgroundImage = `url("${pose.image}")`;
+  el.style.backgroundImage = poseBackground(pose);
   el.style.backgroundSize = 'contain';
   el.style.backgroundPosition = 'center';
   el.style.backgroundRepeat = 'no-repeat';
@@ -266,6 +283,30 @@ function tone() {
   } catch {}
 }
 
+let wakeLock = null;
+const compactLayout = window.matchMedia('(max-width: 800px)');
+
+async function keepAwake() {
+  if (!active || wakeLock || !('wakeLock' in navigator) || document.visibilityState !== 'visible') return;
+  try {
+    const lock = await navigator.wakeLock.request('screen');
+    if (!active) { lock.release().catch(() => {}); return; }
+    wakeLock = lock;
+    lock.addEventListener('release', () => { if (wakeLock === lock) wakeLock = null; });
+  } catch {}
+}
+
+function releaseAwake() {
+  const lock = wakeLock;
+  wakeLock = null;
+  lock?.release().catch(() => {});
+}
+
+function setImmersive(on) {
+  $('session').classList.toggle('immersive', on);
+  if (on) $('showControls').focus({ preventScroll: true });
+}
+
 function start() {
   if (!Number.isFinite(seconds) || seconds < 5 || seconds > 3600) {
     $('error').textContent = t('5초에서 3600초 사이의 시간을 입력해주세요.');
@@ -295,7 +336,9 @@ function start() {
   zoomed = false;
   $('pause').textContent = t('일시정지');
   $('error').textContent = '';
+  $('session').classList.remove('immersive');
   $('session').showModal();
+  keepAwake();
   render();
   last = performance.now();
   clearInterval(interval);
@@ -334,6 +377,9 @@ function renderTimer() {
   $('timer').textContent = `${String(Math.floor(value / 60)).padStart(2, '0')}:${String(value % 60).padStart(2, '0')}`;
   $('phase').textContent = paused ? t('잠깐 쉬어가는 중') : preparing ? t('연필을 준비하세요') : t('몸의 흐름을 관찰해보세요');
   $('timerBar').style.width = `${Math.max(0, remaining / (preparing ? 3 : seconds) * 100)}%`;
+  $('chipTime').textContent = $('timer').textContent;
+  $('chipPhase').textContent = $('phase').textContent;
+  $('chipBar').style.width = $('timerBar').style.width;
 }
 
 function transform() {
@@ -354,6 +400,7 @@ function render() {
     $('localPhoto').alt = photo.name;
   } else {
     setPose($('sessionPhoto'), photo.key);
+    if (queue[index + 1]) preloadPose(queue[index + 1].key);
   }
   $('sessionSource').textContent = t(mode === 'own'
     ? '내 사진 · 서버 전송 없이 이 기기에서만'
@@ -434,7 +481,9 @@ function finishSession() {
   if (!active) return;
   active = false;
   clearInterval(interval);
+  releaseAwake();
   if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+  $('session').classList.remove('immersive');
   $('session').close();
   const total = Math.round(spent);
   let recordId = null;
@@ -628,7 +677,8 @@ function renderLibrary() {
     card.dataset.poseId = pose.id;
     card.setAttribute('aria-label', `${pose.id} · ${t(pose.name.ko)} · ${t('이 포즈로 시작')}`);
     const img = document.createElement('img');
-    img.src = pose.thumb;
+    img.src = pose.thumbWebp ?? pose.thumb;
+    img.onerror = () => { img.onerror = null; img.src = pose.thumb; };
     img.alt = t(pose.name.ko);
     img.width = pose.width;
     img.height = pose.height;
@@ -710,7 +760,17 @@ $('next').onclick = () => move(1);
 $('previous').onclick = () => move(-1);
 $('mirror').onclick = () => { flip = !flip; transform(); };
 $('zoom').onclick = () => { zoomed = !zoomed; render(); };
-$('full').onclick = fullscreen;
+$('full').onclick = () => {
+  if (compactLayout.matches) {
+    setImmersive(true);
+    if (document.fullscreenEnabled && !document.fullscreenElement) $('session').requestFullscreen().catch(() => {});
+  } else fullscreen();
+};
+$('showControls').onclick = () => { setImmersive(false); $('pause').focus({ preventScroll: true }); };
+document.querySelector('.practice-image').addEventListener('click', () => {
+  if (active && compactLayout.matches) setImmersive(!$('session').classList.contains('immersive'));
+});
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') keepAwake(); });
 $('sessionSound').onclick = () => { $('sound').checked = !$('sound').checked; render(); };
 $('finish').onclick = finishSession;
 $('session').addEventListener('cancel', event => { event.preventDefault(); finishSession(); });
