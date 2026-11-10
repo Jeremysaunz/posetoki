@@ -14,19 +14,22 @@
   const t = text => window.PoseTokiI18n?.t(text) ?? text;
 
   // Coordinates are in the 768 x 1152 space of the reference images.
+  // The plumb line starts at the torso centre (about 65% of the way from the
+  // shoulder midpoint to the hip midpoint), a closer stand-in for the centre
+  // of mass than the pit of the neck.
   const DEMO = [
     { id: 'PT029', head: [372, 200, 56, 68, -10], action: 'M150 196C250 320 334 512 392 736S426 958 428 994',
-      shoulder: [200, 318, 494, 298], hip: [244, 552, 446, 532], plumb: [355, 284, 1010], ruler: [135, 130, 995],
-      tags: [[120, 452, 'start'], [512, 290, 'start'], [464, 566, 'start'], [355, 1062, 'middle']] },
+      shoulder: [200, 318, 494, 298], hip: [244, 552, 446, 532], plumb: [346, 460, 1010], ruler: [135, 130, 995],
+      tags: [[120, 452, 'start'], [512, 290, 'start'], [464, 566, 'start'], [346, 1062, 'middle']] },
     { id: 'PT018', head: [425, 208, 50, 62, -8], action: 'M96 772C230 660 350 520 392 420S430 230 432 150',
-      shoulder: [346, 322, 481, 337], hip: [346, 495, 451, 517], plumb: [435, 300, 960], ruler: [150, 120, 790],
-      tags: [[200, 560, 'end'], [330, 300, 'end'], [472, 552, 'start'], [435, 1012, 'middle']] },
+      shoulder: [346, 322, 481, 337], hip: [346, 495, 451, 517], plumb: [404, 444, 960], ruler: [150, 120, 790],
+      tags: [[200, 560, 'end'], [330, 300, 'end'], [472, 552, 'start'], [404, 1012, 'middle']] },
     { id: 'PT036', head: [322, 135, 52, 64, -5], action: 'M312 78C246 300 300 650 372 1002',
-      shoulder: [225, 262, 472, 270], hip: [290, 520, 470, 500], plumb: [337, 210, 1020], ruler: [75, 120, 1005],
-      tags: [[205, 560, 'end'], [490, 248, 'start'], [492, 488, 'start'], [337, 1066, 'middle']] },
+      shoulder: [225, 262, 472, 270], hip: [290, 520, 470, 500], plumb: [369, 425, 1020], ruler: [75, 120, 1005],
+      tags: [[205, 560, 'end'], [490, 248, 'start'], [492, 488, 'start'], [369, 1066, 'middle']] },
     { id: 'PT025', head: [378, 232, 52, 70, 0], action: 'M372 165C392 420 452 640 652 866',
-      shoulder: [312, 360, 462, 367], hip: [267, 555, 477, 585], plumb: [393, 345, 995], ruler: [160, 140, 975],
-      tags: [[452, 180, 'start'], [478, 338, 'start'], [494, 600, 'start'], [393, 1042, 'middle']] }
+      shoulder: [312, 360, 462, 367], hip: [267, 555, 477, 585], plumb: [377, 498, 995], ruler: [160, 140, 975],
+      tags: [[452, 180, 'start'], [478, 338, 'start'], [494, 600, 'start'], [377, 1042, 'middle']] }
   ];
   const HOLD = 6500;
   const poses = window.PoseTokiPoses ?? [];
@@ -80,6 +83,8 @@
     const [px, top, bottom] = pose.plumb;
     set(svg.querySelector('.plumb'), { d: `M${px} ${top}V${bottom}` });
     set(svg.querySelector('.bob'), { d: `M${px - 12} ${bottom}h24l-12 20z` });
+    const centre = svg.querySelector('.com');
+    if (centre) set(centre, { cx: px, cy: top });
     svg.querySelectorAll('.tag').forEach((tag, i) => {
       const [x, y, anchor] = pose.tags[i];
       set(tag, { x, y, 'text-anchor': anchor });

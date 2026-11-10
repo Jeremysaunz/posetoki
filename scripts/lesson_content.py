@@ -18,7 +18,7 @@ LESSONS = {
         "gesture": {
             "title": "30초 동작선: 걷는 몸의 흐름을 한 줄로",
             "description": "걷는 인물 사진을 보며 동작선, 몸통의 방향, 앞발을 찾는 30초·1분·3분 크로키 연습.",
-            "lead": "동작선은 척추를 베끼는 선이 아니라 포즈 전체가 어디로 향하는지 요약한 선입니다. PT014의 걷는 자세에서 얼굴이나 손가락을 잠시 잊고, 머리·가슴통·앞으로 나간 발의 관계를 먼저 읽어 보세요.",
+            "lead": "동작선은 포즈 전체가 어디로 향하는지 요약한 선입니다. 척추와 겹칠 때도 많지만 척추를 그대로 베끼는 선은 아닙니다. PT014의 걷는 자세에서 얼굴이나 손가락을 잠시 잊고, 머리·가슴통·앞으로 나간 발의 관계를 먼저 읽어 보세요.",
             "primary": ("pose-07.jpg", "회색 스튜디오에서 한 발을 앞으로 내딛고 고개를 돌린 착의 인물", "PT014 포즈 · 걷기. 앞쪽 팔과 발이 서로 반대 방향으로 흔들리는 순간을 관찰합니다."),
             "markers": ((52, 15), (58, 33), (51, 75)),
             "focus": (
@@ -51,12 +51,12 @@ LESSONS = {
             "timing": (
                 "머리·골반·두 발의 위치를 점 네 개로 놓고, 골반에서 지지 발로 내려가는 선을 그립니다. 외곽선을 닫지 않습니다.",
                 "어깨선과 골반선을 추가한 뒤 두 선의 각도를 비교합니다. 지지 다리는 진하게, 보조 다리는 가볍게 그려 무게 차이를 표현합니다.",
-                "가슴통의 부피, 무릎의 방향, 신발의 접지면을 더합니다. 마지막에는 머리 아래에서 바닥으로 내린 가상의 수직선이 어디를 지나는지 점검합니다.",
+                "가슴통의 부피, 무릎의 방향, 신발의 접지면을 더합니다. 마지막에는 몸통 가운데에서 바닥으로 가상의 수직선을 내려, 한 다리에 무게를 실었다면 그 발 쪽으로, 두 발에 고르게 섰다면 두 발 사이로 떨어지는지 점검합니다.",
             ),
             "mistake": "두 다리를 같은 굵기와 길이의 기둥처럼 그리면 서 있는 자세가 뻣뻣해집니다. 한 다리는 무게를 받는 축, 다른 다리는 균형을 돕는 축으로 구별하세요. 사진만으로 압력의 크기를 확정할 수 없으므로, 발과 골반의 위치를 근거로 가설을 세우고 그림에서 설득력 있게 표현하는 것이 목적입니다.",
             "secondary": ("pose-19.jpg", "한 발을 낮은 발판에 올리고 균형을 잡는 착의 인물", "PT015 포즈 · 발판을 딛는 순간. 지지면의 높이가 달라지면 골반과 무릎의 방향도 바뀝니다."),
             "transfer": "PT015 포즈의 바닥과 발판 윗면을 서로 다른 높이의 두 수평선으로 표시하세요. 발판 위 발과 바닥의 발을 연결할 때 다리 길이를 억지로 맞추지 말고, 무릎이 어느 방향으로 접히는지 살핍니다. 웹툰 컷으로 옮길 때는 발판을 지워도 인물이 어떤 높이를 딛는지 읽히는지 확인해 보세요.",
-            "review": ("발과 바닥의 접지점이 사진과 일치하나요?", "어깨선·골반선이 무심코 평행해지지 않았나요?", "몸통 아래로 내린 수직선이 지지면 근처에 도착하나요?"),
+            "review": ("발과 바닥의 접지점이 사진과 일치하나요?", "어깨선·골반선이 무심코 평행해지지 않았나요?", "몸통 가운데에서 내린 수직선이 지지 발 쪽(두 발이면 두 발 사이)에 떨어지나요?"),
             "practice": "연습실에서 1분·5장을 고른 뒤 매 장마다 발 두 곳부터 표시하세요. 첫 묶음은 인체 비례보다 접지와 기울기만 평가하고, 다음 묶음에서 다리 길이를 다듬습니다.",
         },
         "seated": {
@@ -97,7 +97,7 @@ LESSONS = {
         "gesture": {
             "title": "A 30-second gesture line for a walking figure",
             "description": "Use a walking pose to find the line of action, torso direction, and leading foot in 30-second, 1-minute, and 3-minute studies.",
-            "lead": "A line of action is not a tracing of the spine. It summarizes where the whole pose is going. In pose PT014, set the face and fingers aside and first compare the head, rib cage, pelvis, and leading foot.",
+            "lead": "A line of action summarizes where the whole pose is going. It often runs close to the spine, but it is not a tracing of it. In pose PT014, set the face and fingers aside and first compare the head, rib cage, pelvis, and leading foot.",
             "primary": ("pose-07.jpg", "Clothed man stepping forward in a gray studio while turning his head", "Pose PT014 · Walking. Notice the opposing swing of the forward arm and leg."),
             "markers": ((52, 15), (58, 33), (51, 75)),
             "focus": (
@@ -130,12 +130,12 @@ LESSONS = {
             "timing": (
                 "Place four points: head, pelvis, and two feet. Draw from pelvis toward the apparent supporting foot; leave the outline open.",
                 "Add shoulder and pelvic lines and compare their angles. Give the supporting leg a firmer line and the balancing leg a lighter one.",
-                "Add rib-cage volume, knee direction, and shoe contact surfaces. Finally, imagine a vertical line dropped from the upper body and see where it reaches the floor.",
+                "Add rib-cage volume, knee direction, and shoe contact surfaces. Finally, drop an imaginary vertical line from the middle of the torso. It should land toward the supporting foot, or between the feet when the weight is shared evenly.",
             ),
             "mistake": "Two legs drawn as equally thick, equally loaded pillars make a stance rigid. Treat one as the likely weight-bearing axis and the other as a balancing axis. A photo cannot reveal exact pressure, so this is an observation-based hypothesis to make visually convincing, not a measured biomechanical claim.",
             "secondary": ("pose-19.jpg", "Clothed person placing one foot on a low block while balancing", "Pose PT015 · Stepping onto a block. Different support heights change the pelvis and knees."),
             "transfer": "Mark the floor and top of the block as two horizontal lines at different heights. Do not force the legs to look equal when connecting the block foot to the floor foot; observe which way each knee folds. For a comic panel, hide the block briefly and ask whether the figure still reads as stepping to a higher level.",
-            "review": ("Do the foot-to-floor contacts match the reference?", "Did you make shoulder and pelvic lines parallel by habit?", "Does a vertical line from the upper body reach a plausible support area?"),
+            "review": ("Do the foot-to-floor contacts match the reference?", "Did you make shoulder and pelvic lines parallel by habit?", "Does a vertical line from the middle of the torso land toward the supporting foot, or between the feet?"),
             "practice": "Choose 1 minute and 5 poses in the studio. Mark both foot contacts first on every sheet. Review the first set only for support and tilt; refine leg lengths in a second set.",
         },
         "seated": {
@@ -176,7 +176,7 @@ LESSONS = {
         "gesture": {
             "title": "30秒の動勢線：歩く身体を一本の線で捉える",
             "description": "歩く人物の写真から動勢線、胴体の向き、前に出た足を探す30秒・1分・3分のクロッキー練習。",
-            "lead": "動勢線は背骨の写しではなく、ポーズ全体の流れを要約する線です。PT014の歩くポーズでは顔や指をいったん忘れ、頭・胸郭・骨盤・前に出た足の関係から見てみましょう。",
+            "lead": "動勢線はポーズ全体の流れを要約する線です。背骨と重なることも多いものの、背骨をそのままなぞる線ではありません。PT014の歩くポーズでは顔や指をいったん忘れ、頭・胸郭・骨盤・前に出た足の関係から見てみましょう。",
             "primary": ("pose-07.jpg", "灰色のスタジオで一歩を踏み出し、顔を横に向けた服を着た男性", "PT014・歩くポーズ。腕と脚が逆方向に振れる瞬間を観察します。"),
             "markers": ((52, 15), (58, 33), (51, 75)),
             "focus": (
@@ -209,12 +209,12 @@ LESSONS = {
             "timing": (
                 "頭・骨盤・両足の四点を置き、骨盤から支持脚へ下りる線を引きます。外形は閉じません。",
                 "肩線と骨盤線を加え、角度を比べます。支持脚をやや強く、バランスを取る脚を軽く描き分けます。",
-                "胸郭の厚み、膝の向き、靴と床の接触面を足します。最後に上半身から下ろした仮の垂線が床のどこへ届くか確認します。",
+                "胸郭の厚み、膝の向き、靴と床の接触面を足します。最後に胴体の中ほどから仮の垂線を下ろし、片脚に体重をかけていればその足の側へ、両足に均等なら両足の間へ落ちるか確認します。",
             ),
             "mistake": "両脚を同じ太さ・同じ重さの柱として描くと、立ち姿が硬くなります。一方を主な支持軸、もう一方をバランスを補う軸として区別しましょう。写真だけで足裏の圧力は測れません。足と骨盤の位置を根拠に、納得できる見え方を作るための仮説です。",
             "secondary": ("pose-19.jpg", "低い台に片足を置き、バランスを取る服を着た人物", "PT015・台に足を置く瞬間。支持面の高さが変わると骨盤と膝の向きも変わります。"),
             "transfer": "床と台の上面を高さの異なる二本の水平線で示します。台の足と床の足をつなぐとき、脚を無理に同じ長さにせず、膝がどちらへ曲がるか見ましょう。漫画のコマでは台を一度隠し、それでも人物が高い場所へ踏み出すように読めるか試してください。",
-            "review": ("足と床の接地点は写真と合っていますか。", "肩線と骨盤線を無意識に平行にしていませんか。", "上半身から下ろした垂線は支持面の近くに届きますか。"),
+            "review": ("足と床の接地点は写真と合っていますか。", "肩線と骨盤線を無意識に平行にしていませんか。", "胴体の中ほどから下ろした垂線は、支える足の側(両足なら両足の間)に落ちていますか。"),
             "practice": "練習室で1分・5ポーズを選び、毎回まず両足の接地点を印します。最初の一組は支持と傾きだけを見直し、次の一組で脚の長さを整えましょう。",
         },
         "seated": {
@@ -255,7 +255,7 @@ LESSONS = {
         "gesture": {
             "title": "30 秒動勢線：用一條線抓住走路的方向",
             "description": "用走路姿勢練習動勢線、軀幹方向與前腳位置，分別進行 30 秒、1 分鐘和 3 分鐘速寫。",
-            "lead": "動勢線不是照著脊椎描線，而是概括整個姿勢的流向。看 PT014走路姿勢時，先放下臉和手指，觀察頭部、胸廓、骨盆與前腳的關係。",
+            "lead": "動勢線概括整個姿勢的流向。它常與脊椎很接近，但不是照著脊椎描線。看 PT014走路姿勢時，先放下臉和手指，觀察頭部、胸廓、骨盆與前腳的關係。",
             "primary": ("pose-07.jpg", "灰色攝影棚中踏出一步並轉頭的著衣男性", "PT014姿勢・走路。觀察手臂與腳在相反方向擺動的瞬間。"),
             "markers": ((52, 15), (58, 33), (51, 75)),
             "focus": (
@@ -288,12 +288,12 @@ LESSONS = {
             "timing": (
                 "放下頭、骨盆與雙腳四個點，再畫出骨盆通往支撐腳的線，不急著封閉外輪廓。",
                 "加入肩線與骨盆線並比較角度。用較肯定的線畫支撐腿，較輕的線畫協助平衡的腿。",
-                "補上胸廓厚度、膝蓋方向與鞋底接觸面。最後想像一條從上半身落下的垂線，看它落在地面哪裡。",
+                "補上胸廓厚度、膝蓋方向與鞋底接觸面。最後想像一條從軀幹中段落下的垂線：重心在單腳時應落向那隻腳，兩腳平均承重時則落在兩腳之間。",
             ),
             "mistake": "把兩條腿畫成一樣粗、一樣承重的柱子，站姿就會僵硬。試著區分主要支撐軸與協助平衡的軸。單靠照片無法測出腳底的實際壓力；這是根據腳和骨盆位置提出的觀察假設，目的是讓畫面更可信。",
             "secondary": ("pose-19.jpg", "一隻腳踏在矮台上並維持平衡的著衣人物", "PT015姿勢・踩上矮台。支撐面的高度不同，骨盆與膝蓋方向也會改變。"),
             "transfer": "先把地板與台面畫成不同高度的兩條水平線。連接台上的腳與地上的腳時，不要勉強兩條腿看起來一樣長，先觀察膝蓋往哪裡彎。畫漫畫分鏡時，可暫時遮住台階，看看人物是否仍像正要踏上較高處。",
-            "review": ("腳與地面的接觸點和照片一致嗎？", "肩線與骨盆線是否被習慣性地畫成平行？", "從上半身落下的垂線是否接近合理的支撐面？"),
+            "review": ("腳與地面的接觸點和照片一致嗎？", "肩線與骨盆線是否被習慣性地畫成平行？", "從軀幹中段落下的垂線，是否落向承重腳（兩腳承重時落在兩腳之間）？"),
             "practice": "在練習室選 1 分鐘、5 個姿勢，每張先標雙腳接地點。第一輪只檢查支撐與傾斜，第二輪再修整腿的長度。",
         },
         "seated": {
