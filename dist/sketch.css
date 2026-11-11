@@ -305,3 +305,6 @@
 @media(prefers-reduced-motion:reduce){
   :root .intro h1 .hero-line{animation:none!important;color:var(--ink);-webkit-text-stroke:0;background:none}
 }
+:root .hub-link{margin:18px 0 0;font-size:14px;font-weight:700}
+:root .hub-link a{color:var(--blue-ink)}
+:root body>header nav{scrollbar-width:none}:root body>header nav::-webkit-scrollbar{display:none}

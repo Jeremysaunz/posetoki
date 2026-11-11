@@ -27,7 +27,7 @@ def metadata(lang, title, description, url, image='/assets/pose-01.jpg', kind='w
         + '\n<meta name="twitter:card" content="summary_large_image">\n')
 
 
-def page_schema(lang, slug, title, description, image=None, kind='Article', items=None):
+def page_schema(lang, slug, title, description, image=None, kind='Article', items=None, published=None, modified=None):
     url = f'{ORIGIN}/{LANGS[lang]}/{slug}.html'
     author = {'@type': 'Person', '@id': ORIGIN + '/#jeremy', 'name': AUTHOR[lang], 'url': f'{ORIGIN}/{LANGS[lang]}/about.html#operator'}
     node = {'@type': kind, '@id': url + '#content', 'url': url, 'name': title,
@@ -35,7 +35,7 @@ def page_schema(lang, slug, title, description, image=None, kind='Article', item
         'isPartOf': {'@id': ORIGIN + '/#website'}}
     if kind == 'Article':
         node.update(headline=title, author=author, publisher=author,
-                    datePublished=DATE, dateModified=DATE, mainEntityOfPage=url)
+                    datePublished=published or DATE, dateModified=modified or DATE, mainEntityOfPage=url)
     if image:
         node['image'] = ORIGIN + image
     if items:

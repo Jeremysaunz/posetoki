@@ -8,6 +8,7 @@ from lesson_content import LESSONS, LESSON_SLUGS
 from operations_content import OPERATIONS, operation_sections
 from discovery_content import COPY as DISCOVERY, EXTRA_SLUGS, render_beginner, render_catalog, load_poses
 from seo_common import HOME, metadata, page_schema, byline
+from article_content import ARTICLE_SLUGS, ARTICLE_DATE, HUB_SLUG, HUB, NAV, article_meta, render_article, pick, updated_label
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -16,6 +17,9 @@ ORIGIN = "https://posetoki.com"
 LANGS = {"ko": "ko", "ja": "ja", "en": "en", "zh-TW": "zh-tw"}
 NAMES = {"ko": "한국어", "ja": "日本語", "en": "English", "zh-TW": "繁體中文"}
 SLUGS = ("guide", "about", "privacy")
+# Pages whose content changed after the first release; everything else keeps 2026-10-02.
+MODIFIED = {"gesture": "2026-11-10", "balance": "2026-11-10", HUB_SLUG: ARTICLE_DATE, **{slug: ARTICLE_DATE for slug in ARTICLE_SLUGS}}
+LEARN_SECTION = {"guide", "beginner", HUB_SLUG, *LESSON_SLUGS, *ARTICLE_SLUGS}
 
 COPY = {
     "ko": {
@@ -253,12 +257,62 @@ def render_lesson(lang: str, slug: str) -> str:
 """
 
 
+def guide_card(lang: str, slug: str) -> str:
+    if slug in ARTICLE_SLUGS:
+        meta = article_meta(lang, slug)
+    elif slug == "beginner":
+        meta = DISCOVERY[lang]["beginner"]
+    elif slug == "guide":
+        meta = COPY[lang]["guide"]
+    else:
+        meta = LESSONS[lang][slug]
+    return (f'<a class="lesson-card" href="{page_href(lang, slug)}"><strong>{escape(meta["title"])}</strong>'
+            f'<span>{escape(meta["description"])}</span></a>')
+
+
+def render_hub(lang: str) -> str:
+    groups = "".join(
+        f'<section class="lesson-index"><h2>{escape(pick(lang, heading))}</h2><div class="lesson-cards">'
+        + "".join(guide_card(lang, slug) for slug in slugs) + '</div></section>'
+        for heading, slugs in HUB["groups"]
+    )
+    return groups + f'<p><a href="{page_href(lang, "poses")}">{escape(pick(lang, HUB["poses_note"]))}</a></p>'
+
+
+def site_nav(lang: str, slug: str) -> str:
+    """Same four destinations as the homepage header."""
+    current = "learn" if slug in LEARN_SECTION else slug
+    items = [("studio", HOME[lang]), ("learn", page_href(lang, HUB_SLUG)), ("poses", page_href(lang, "poses")), ("about", page_href(lang, "about"))]
+    return "".join(
+        f'<a href="{href}"' + (' aria-current="page"' if key == current else '') + f'>{escape(pick(lang, NAV[key]))}</a>'
+        for key, href in items
+    )
+
+
+def footer_nav(lang: str, slug: str) -> str:
+    items = [("learn", page_href(lang, HUB_SLUG)), ("poses", page_href(lang, "poses")), ("about_long", page_href(lang, "about")), ("privacy", page_href(lang, "privacy"))]
+    return "".join(
+        f'<a href="{href}"' + (' aria-current="page"' if href == page_href(lang, slug) else '') + f'>{escape(pick(lang, NAV[key]))}</a>'
+        for key, href in items
+    )
+
+
 def render(lang: str, slug: str) -> str:
     copy = COPY[lang]
-    article = DISCOVERY[lang][slug] if slug in EXTRA_SLUGS else copy[slug] if slug in SLUGS else LESSONS[lang][slug]
+    if slug in ARTICLE_SLUGS:
+        article = article_meta(lang, slug)
+    elif slug == HUB_SLUG:
+        article = {key: pick(lang, HUB[key]) for key in ("title", "description", "lead")}
+    else:
+        article = DISCOVERY[lang][slug] if slug in EXTRA_SLUGS else copy[slug] if slug in SLUGS else LESSONS[lang][slug]
     operation = OPERATIONS[lang]
     title = operation["title"] if slug == "about" else article["title"]
-    body = render_beginner(lang) if slug == 'beginner' else render_catalog(lang) if slug == 'poses' else article["body"] if slug in SLUGS else render_lesson(lang, slug)
+    if slug in ARTICLE_SLUGS:
+        body = render_article(lang, slug)
+    elif slug == HUB_SLUG:
+        body = render_hub(lang)
+    else:
+        body = render_beginner(lang) if slug == 'beginner' else render_catalog(lang) if slug == 'poses' else article["body"] if slug in SLUGS else render_lesson(lang, slug)
     if slug == "about":
         before, after = operation_sections(lang)
         body = before + body + after
@@ -266,7 +320,9 @@ def render(lang: str, slug: str) -> str:
         body = f'<p>{escape(operation["privacy_operator"])}</p>' + body
     if slug == "guide" or slug in LESSON_SLUGS or slug == 'beginner':
         body += lesson_index(lang, slug if slug in LESSON_SLUGS else None)
-    if slug != 'privacy':
+    if slug in ARTICLE_SLUGS:
+        body += f'<p class="hub-link"><a href="{page_href(lang, HUB_SLUG)}">{escape(pick(lang, HUB["title"]))} →</a></p>'
+    elif slug not in ('privacy', HUB_SLUG):
         body += f'<section><h2>{escape(DISCOVERY[lang]["nav"][0])}</h2><p><a href="{page_href(lang, "beginner")}">{escape(DISCOVERY[lang]["beginner"]["title"])}</a> · <a href="{page_href(lang, "poses")}">{escape(DISCOVERY[lang]["nav"][1])}</a></p></section>' if slug != 'beginner' else f'<p><a href="{page_href(lang, "poses")}">{escape(DISCOVERY[lang]["nav"][1])} →</a></p>'
     lesson_style = '<link rel="stylesheet" href="/lesson.css?v=1">'
     alternates = "\n".join(
@@ -279,17 +335,12 @@ def render(lang: str, slug: str) -> str:
         + f'>{NAMES[code]}</a>'
         for code in LANGS
     )
-    nav = "".join(
-        f'<a href="{page_href(lang, item)}"'
-        + (' aria-current="page"' if item == slug else '')
-        + f'>{escape(operation["nav"] if item == "about" else copy["nav"][item])}</a>'
-        for item in SLUGS
-    )
-    nav += f'<a href="{page_href(lang, "poses")}">{escape(DISCOVERY[lang]["nav"][1])}</a>'
+    nav = site_nav(lang, slug)
+    date = MODIFIED.get(slug, "2026-10-02")
     image = '/assets/' + LESSONS[lang][slug]['primary'][0] if slug in LESSON_SLUGS else '/assets/pose-01.jpg'
-    kind = 'Article' if slug in ('guide', 'beginner', *LESSON_SLUGS) else 'CollectionPage' if slug == 'poses' else 'AboutPage' if slug == 'about' else 'WebPage'
+    kind = 'Article' if slug in ('guide', 'beginner', *LESSON_SLUGS, *ARTICLE_SLUGS) else 'CollectionPage' if slug in ('poses', HUB_SLUG) else 'AboutPage' if slug == 'about' else 'WebPage'
     items = [{'@type': 'ListItem', 'position': i + 1, 'item': {'@type': 'ImageObject', 'name': p['name'][lang], 'description': p['focus'][lang], 'contentUrl': ORIGIN + p['image'], 'url': page_url(lang, slug) + '#' + p['id']}} for i, p in enumerate(load_poses())] if slug == 'poses' else None
-    seo = metadata(lang, title + ' | PoseToki', article['description'], page_url(lang, slug), image, 'article' if kind == 'Article' else 'website') + '\n' + page_schema(lang, slug, title, article['description'], image, kind, items)
+    seo = metadata(lang, title + ' | PoseToki', article['description'], page_url(lang, slug), image, 'article' if kind == 'Article' else 'website') + '\n' + page_schema(lang, slug, title, article['description'], image, kind, items, published=ARTICLE_DATE if slug in ARTICLE_SLUGS else None, modified=date)
     return f"""<!doctype html>
 <html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{escape(title)} | PoseToki</title>
@@ -305,15 +356,15 @@ def render(lang: str, slug: str) -> str:
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..700&amp;display=swap">
 <link rel="stylesheet" href="/content.css?v=3">
 {lesson_style}
-<link rel="stylesheet" href="/sketch-content.css?v=1">
+<link rel="stylesheet" href="/sketch-content.css?v=2">
 <script src="/theme.js?v=1"></script>
 </head><body>
 <a class="skip" href="#content">{escape(copy['a11y']['skip'])}</a>
-<header class="site-header"><div class="shell top"><a class="brand" href="{HOME[lang]}"><img class="brand-mark" src="/assets/rabbit-mark.svg" alt=""> <strong>PoseToki</strong></a><div class="header-tools"><nav aria-label="{escape(copy['a11y']['main_nav'])}"><a href="{HOME[lang]}">{escape(copy['nav']['studio'])}</a>{nav}</nav>{theme_toggle(lang)}</div></div></header>
+<header class="site-header"><div class="shell top"><a class="brand" href="{HOME[lang]}"><img class="brand-mark" src="/assets/rabbit-mark.svg" alt=""> <strong>PoseToki</strong></a><div class="header-tools"><nav aria-label="{escape(copy['a11y']['main_nav'])}">{nav}</nav>{theme_toggle(lang)}</div></div></header>
 <main class="shell" id="content"><div class="language-links" aria-label="{escape(copy['a11y']['languages'])}">{languages}</div>
-<article class="{'catalog-article' if slug == 'poses' else 'lesson-article' if slug in LESSON_SLUGS else ''}"><p class="eyebrow">PoseToki · {escape(operation['nav'] if slug == 'about' else copy['nav'].get(slug, copy['nav']['guide']))}</p><h1>{escape(title)}</h1><p class="lead">{escape(article['lead'])}</p>{byline(lang)}<p class="updated"><time datetime="2026-10-02">{escape(copy['updated'])}</time></p>{body}</article>
+<article class="{'catalog-article' if slug == 'poses' else 'lesson-article' if slug in LESSON_SLUGS else ''}"><p class="eyebrow">PoseToki · {escape(pick(lang, NAV['about_long']) if slug == 'about' else pick(lang, NAV['privacy']) if slug == 'privacy' else pick(lang, NAV['poses']) if slug == 'poses' else pick(lang, NAV['learn']))}</p><h1>{escape(title)}</h1><p class="lead">{escape(article['lead'])}</p>{byline(lang)}<p class="updated"><time datetime="{date}">{escape(updated_label(lang, date))}</time></p>{body}</article>
 <div class="next"><a class="primary" href="{HOME[lang]}">{escape(copy['back'])} →</a></div></main>
-<footer><div class="shell footer-inner"><div><a class="brand" href="{HOME[lang]}"><img class="brand-mark" src="/assets/rabbit-mark.svg" alt=""> <strong>PoseToki</strong></a><small class="operator-note">{escape(operation['operator'])}</small></div><nav aria-label="{escape(copy['a11y']['info'])}">{nav}</nav><div class="contact"><a href="{page_href(lang, 'about')}#feedback">{escape(copy['contact'])}</a><small>{escape(copy['contact_note'])}</small></div></div></footer>
+<footer><div class="shell footer-inner"><div><a class="brand" href="{HOME[lang]}"><img class="brand-mark" src="/assets/rabbit-mark.svg" alt=""> <strong>PoseToki</strong></a><small class="operator-note">{escape(operation['operator'])}</small></div><nav aria-label="{escape(copy['a11y']['info'])}">{footer_nav(lang, slug)}</nav><div class="contact"><a href="{page_href(lang, 'about')}#feedback">{escape(copy['contact'])}</a><small>{escape(copy['contact_note'])}</small></div></div></footer>
 <script>try{{localStorage.setItem('posetoki-lang',document.documentElement.lang)}}catch{{}}</script>
 </body></html>
 """
@@ -335,13 +386,15 @@ def main() -> None:
     for lang, path in LANGS.items():
         target = DIST / path
         target.mkdir(parents=True, exist_ok=True)
-        for slug in (*SLUGS, *LESSON_SLUGS, *EXTRA_SLUGS):
+        for slug in (*SLUGS, *LESSON_SLUGS, *EXTRA_SLUGS, *ARTICLE_SLUGS, HUB_SLUG):
             (target / f"{slug}.html").write_text(render(lang, slug), encoding="utf-8")
             urls.append(page_url(lang, slug))
     sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n'
+    lastmod = {page_url(lang, slug): date for lang in LANGS for slug, date in MODIFIED.items()}
+    lastmod.update({ORIGIN + href: "2026-11-10" for href in HOME.values()})
     for url in urls:
         images = ''.join(f'<image:image><image:loc>{ORIGIN}{p["image"]}</image:loc></image:image>' for p in load_poses()) if url == page_url('ko', 'poses') else ''
-        sitemap += f'  <url><loc>{url}</loc><lastmod>2026-10-02</lastmod>{images}</url>\n'
+        sitemap += f'  <url><loc>{url}</loc><lastmod>{lastmod.get(url, "2026-10-02")}</lastmod>{images}</url>\n'
     sitemap += "</urlset>\n"
     (DIST / "sitemap.xml").write_text(sitemap, encoding="utf-8")
     (DIST / "robots.txt").write_text(

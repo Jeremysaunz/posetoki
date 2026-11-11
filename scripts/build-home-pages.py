@@ -9,6 +9,7 @@ from pathlib import Path
 from lesson_content import LESSONS
 from discovery_content import COPY as DISCOVERY, load_poses
 from seo_common import HOME, ORIGIN, LANGS, metadata, jsonld
+from article_content import HUB, article_meta, pick
 
 ROOT = Path(__file__).resolve().parents[1]
 COL = {'ko': 0, 'ja': 1, 'en': 2, 'zh-TW': 3}
@@ -75,10 +76,10 @@ class Localize(HTMLParser):
 def learning(lang):
     labels=LABELS[lang];path=LANGS[lang]
     cards=''
-    for slug in ('beginner','gesture','balance','seated'):
-        article=DISCOVERY[lang][slug] if slug=='beginner' else LESSONS[lang][slug]
+    for slug in ('beginner','30-day-routine','common-mistakes','gesture'):
+        article=DISCOVERY[lang][slug] if slug=='beginner' else article_meta(lang,slug) if slug in ('30-day-routine','common-mistakes') else LESSONS[lang][slug]
         cards+=f'<a class="learning-card" data-localized-page="{slug}" href="/{path}/{slug}.html"><strong>{escape(article["title"])}</strong><span>{escape(article["description"])}</span></a>'
-    return f'<section class="learning" id="learn"><div class="section-title"><div><div class="eyebrow">{labels[0]}</div><h2>{labels[1]}</h2></div></div><div class="learning-grid">{cards}</div><a class="catalog-link" data-localized-page="poses" href="/{path}/poses.html"><strong>{labels[2]} →</strong><span>{labels[3]}</span></a></section>'
+    return f'<section class="learning" id="learn"><div class="section-title"><div><div class="eyebrow">{labels[0]}</div><h2>{labels[1]}</h2></div></div><div class="learning-grid">{cards}</div><p class="hub-link"><a href="/{path}/learn.html">{escape(pick(lang,HUB['title']))} →</a></p><a class="catalog-link" data-localized-page="poses" href="/{path}/poses.html"><strong>{labels[2]} →</strong><span>{labels[3]}</span></a></section>'
 
 
 def contact_sheet(lang, parser):
